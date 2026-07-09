@@ -17,7 +17,7 @@ print("Model loaded successfully.")
 
 # Load the fine-tuned YOLOv5 model for emergency vehicles
 print("Loading custom YOLOv5 model for emergency vehicles...")
-custom_model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=True)
+custom_model = torch.hub.load('ultralytics/yolov5', 'custom', path='weights/best.pt', force_reload=True)
 print("Custom model loaded successfully.")
 
 
@@ -185,7 +185,7 @@ def process_lane(idx, cap, video_writer, skip_time=False , skip_time1=False):
     ret, frame = cap.read()
     if not ret:
         print(f"Video for Lane {idx + 1} has ended.")
-        return None, None ,None # Indicate that the video has ended
+        return None, None, None, None # Indicate that the video has ended
 
     print(f"Frame captured from Lane {idx + 1}.")
 
@@ -356,7 +356,7 @@ def update_gui():
         # Simulate the signal operation in sequence
         for i in sorted_lane_indices:
             # Yellow light phase for the previous lane (if not the first lane in cycle)
-            if i > 0:
+            if sorted_lane_indices.index(i) > 0:
                 previous_lane = sorted_lane_indices[sorted_lane_indices.index(i) - 1]
             else:
                 previous_lane = sorted_lane_indices[-1]

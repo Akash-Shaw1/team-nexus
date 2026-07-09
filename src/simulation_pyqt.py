@@ -30,11 +30,11 @@ total_green_light_time = [0] * 4
 
 # Load the fine-tuned YOLOv5 model for emergency vehicles
 print("Loading custom YOLOv5 model for emergency vehicles...")
-custom_model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=True)
+custom_model = torch.hub.load('ultralytics/yolov5', 'custom', path='weights/best.pt', force_reload=True)
 print("Custom model loaded successfully.")
 
 # Load the background image
-background_image = cv2.imread('LatestDesign.png')
+background_image = cv2.imread('assets/gui/gui_background.png')
 image_height, image_width = background_image.shape[:2]
 
 # Video paths for four lanes (assuming separate videos for each lane)
@@ -184,7 +184,7 @@ def process_lane(idx, cap, video_writer, skip_time_emergency=False, skip_time_ac
 
     ret, frame = cap.read()
     if not ret:
-        return None, None, None  # Indicate that the video has ended
+        return None, None, None, None  # Indicate that the video has ended
 
     print(f"Frame captured from Lane {idx + 1}.")
     
@@ -717,7 +717,7 @@ class TrafficSignalSimulator(QtWidgets.QWidget):
             sorted_lane_indices = sorted(range(4), key=lambda idx: vehicle_counts[idx], reverse=True)
 
             for i in sorted_lane_indices:
-                if i > 0:
+                if sorted_lane_indices.index(i) > 0:
                     previous_lane = sorted_lane_indices[sorted_lane_indices.index(i) - 1]
                 else:
                     previous_lane = sorted_lane_indices[-1]
